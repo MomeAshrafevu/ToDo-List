@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Cute Daily Planner ✨</title>
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="planner-wrapper">
+    <!-- Top Header -->
+    <header class="planner-header">
+      <div class="title-area">
+        <span class="logo-emoji">📓</span>
+        <div>
+          <h1>My Daily Planner</h1>
+          <p class="today-date" id="todayDate"></p>
+        </div>
+      </div>
+
+      <div class="trackers">
+        <!-- Mood Tracker -->
+        <div class="tracker-group">
+          <span class="tracker-label">MOOD</span>
+          <div class="mood-pills" id="moodTracker">
+            <button class="mood-btn" data-mood="happy" title="Happy">🥰</button>
+            <button class="mood-btn" data-mood="chill" title="Chill">😊</button>
+            <button class="mood-btn" data-mood="tired" title="Sleepy">😴</button>
+            <button class="mood-btn" data-mood="sad" title="Low">🥺</button>
+            <button class="mood-btn" data-mood="productive" title="On Fire">🔥</button>
+          </div>
+        </div>
+
+        <!-- Weekday Tracker -->
+        <div class="tracker-group">
+          <span class="tracker-label">DAY</span>
+          <div class="day-pills" id="dayTracker">
+            <button class="day-btn" data-day="M">M</button>
+            <button class="day-btn" data-day="T1">T</button>
+            <button class="day-btn" data-day="W">W</button>
+            <button class="day-btn" data-day="T2">T</button>
+            <button class="day-btn" data-day="F">F</button>
+            <button class="day-btn" data-day="S1">S</button>
+            <button class="day-btn" data-day="S2">S</button>
+          </div>
+        </div>
+
+        <!-- Water Tracker -->
+        <div class="tracker-group">
+          <span class="tracker-label">WATER</span>
+          <div class="water-drops" id="waterTracker">
+            <button class="water-btn" data-glass="1">💧</button>
+            <button class="water-btn" data-glass="2">💧</button>
+            <button class="water-btn" data-glass="3">💧</button>
+            <button class="water-btn" data-glass="4">💧</button>
+            <button class="water-btn" data-glass="5">💧</button>
+            <button class="water-btn" data-glass="6">💧</button>
+          </div>
+        </div>
+
+        <button class="reset-btn" onclick="resetPlanner()" title="Clear all tasks">🧹 Reset</button>
+      </div>
+    </header>
+
+    <!-- 2-Column Bento Grid -->
+    <main class="bento-grid">
+      <!-- Left Column -->
+      <div class="column">
+        <!-- Priorities Card -->
+        <section class="card card-pink">
+          <div class="card-badge">⭐ Top Priorities</div>
+          <img src="assets/icons/book.avif" alt="Book" class="corner-img">
+          <ul class="task-list" id="prioritiesList"></ul>
+          <div class="add-row">
+            <input type="text" id="prioritiesInput" placeholder="Must finish today...">
+            <button onclick="addTask('priorities')">+</button>
+          </div>
+        </section>
+
+        <!-- To-Do List Card (Stretched for balanced layout) -->
+        <section class="card card-mint card-tall">
+          <div class="card-badge">✨ To-Do List</div>
+          <img src="assets/icons/pencil.jpg" alt="Pencil" class="corner-img">
+          
+          <!-- Cute Progress Bar -->
+          <div class="progress-wrapper">
+            <div class="progress-info">
+              <span>Daily Progress</span>
+              <span id="progressText">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+
+          <ul class="task-list grow-list" id="todoList"></ul>
+          <div class="add-row">
+            <input type="text" id="todoInput" placeholder="Add a new task...">
+            <button onclick="addTask('todo')">+</button>
+          </div>
+        </section>
+
+        <!-- Playlist & Gratitude Card -->
+        <section class="card card-blue">
+          <div class="card-badge">🎵 Vibe & Gratitude</div>
+          <span class="corner-icon">🎧</span>
+          <div class="meal-row">
+            <span>Song:</span>
+            <input type="text" id="playlistInput" placeholder="Lo-fi beats / Favorite song...">
+          </div>
+          <div class="meal-row">
+            <span>Grateful:</span>
+            <input type="text" id="gratitudeInput" placeholder="One good thing today...">
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column -->
+      <div class="column">
+        <!-- Meals Card -->
+        <section class="card card-yellow">
+          <div class="card-badge">🍰 Meals</div>
+          <img src="assets/icons/mug.avif" alt="Mug" class="corner-img">
+          <div class="meal-row">
+            <span>Breakfast:</span>
+            <input type="text" id="mealBreakfast" placeholder="Pancakes & tea...">
+          </div>
+          <div class="meal-row">
+            <span>Lunch:</span>
+            <input type="text" id="mealLunch" placeholder="Rice & curry...">
+          </div>
+          <div class="meal-row">
+            <span>Dinner:</span>
+            <input type="text" id="mealDinner" placeholder="Soup & bread...">
+          </div>
+        </section>
+
+        <!-- Daily Habits Card -->
+        <section class="card card-pink">
+          <div class="card-badge">🌸 Mini Habits</div>
+          <span class="corner-icon">🎀</span>
+          <div class="habit-grid">
+            <label class="habit-chip"><input type="checkbox" id="habit1"> 📖 Study / Code</label>
+            <label class="habit-chip"><input type="checkbox" id="habit2"> 🧘 Stretch / Walk</label>
+            <label class="habit-chip"><input type="checkbox" id="habit3"> 🧴 Skincare</label>
+            <label class="habit-chip"><input type="checkbox" id="habit4"> 📵 No Late Screen</label>
+          </div>
+        </section>
+
+        <!-- Appointments Card -->
+        <section class="card card-blue">
+          <div class="card-badge">📅 Schedule / Events</div>
+          <span class="corner-icon">📱</span>
+          <ul class="task-list" id="appointmentList"></ul>
+          <div class="add-row">
+            <input type="text" id="appointmentInput" placeholder="10:00 AM - Class / Call...">
+            <button onclick="addTask('appointment')">+</button>
+          </div>
+        </section>
+
+        <!-- Shopping List Card -->
+        <section class="card card-yellow">
+          <div class="card-badge">🛍️ Shopping / Wishlist</div>
+          <span class="corner-icon">📷</span>
+          <ul class="task-list" id="shoppingList"></ul>
+          <div class="add-row">
+            <input type="text" id="shoppingInput" placeholder="Add item to buy...">
+            <button onclick="addTask('shopping')">+</button>
+          </div>
+        </section>
+
+        <!-- Notes Card -->
+        <section class="card card-mint">
+          <div class="card-badge">☁️ Sweet Notes</div>
+          <textarea id="notesArea" rows="3" placeholder="Write cute reminders or brain dump here..."></textarea>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
